@@ -9,6 +9,7 @@
 #include "logger.h"
 #include "mozillavpn.h"
 #include "networkrequest.h"
+#include "telemetry/gleansample.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -77,6 +78,12 @@ QString Balrog::userAgent() {
 }
 
 void Balrog::start(Task* task) {
+  if (m_downloadAndInstall) {
+    emit MozillaVPN::instance()->recordGleanEventWithExtraKeys(
+        GleanSample::updateStep,
+        {{"state", QVariant::fromValue(UpdateProcessStarted).toString()}});
+  }
+
   QString url =
       QString(Constants::balrogUrl()).arg(appVersion()).arg(userAgent());
   logger.debug() << "URL:" << url;
@@ -366,6 +373,10 @@ bool Balrog::computeHash(const QString& url, const QByteArray& data,
     return false;
   }
 
+  emit MozillaVPN::instance()->recordGleanEventWithExtraKeys(
+      GleanSample::updateStep,
+      {{"state", QVariant::fromValue(BalrogValidationCompleted).toString()}});
+
   return saveFileAndInstall(url, data);
 }
 
@@ -404,6 +415,10 @@ bool Balrog::saveFileAndInstall(const QString& url, const QByteArray& data) {
 
   file.close();
 
+  emit MozillaVPN::instance()->recordGleanEventWithExtraKeys(
+      GleanSample::updateStep,
+      {{"state", QVariant::fromValue(BalrogFileSaved).toString()}});
+
   return install(tmpFile);
 }
 
@@ -436,14 +451,16 @@ bool Balrog::install(const QString& filePath) {
 
   connect(process, &QProcess::errorOccurred, this,
           [this](QProcess::ProcessError error) {
-            logger.error() << "Installation failed:" << error;
+            logger.error() << "Installer execution failed:" << error;
             deleteLater();
           });
 
   connect(process,
           QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this,
           [this, process, logFile](int exitCode, QProcess::ExitStatus) {
-            logger.debug() << "Installation completed - exitCode:" << exitCode;
+            logger.debug() << "Installer execution completed - - we should not "
+                              "be here! - exitCode:"
+                           << exitCode;
 
             // In theory we should not be able to read anything more from
             // stdout/stderr.
@@ -483,7 +500,8 @@ bool Balrog::install(const QString& filePath) {
   connect(process,
           QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this,
           [this, process](int exitCode, QProcess::ExitStatus) {
-            logger.debug() << "Installation completed - exitCode:" << exitCode;
+            logger.debug() << "Async installation activated - exitCode:"
+                           << exitCode;
 
             logger.debug() << "Stdout:" << Qt::endl
                            << qUtf8Printable(process->readAllStandardOutput())
@@ -503,6 +521,10 @@ bool Balrog::install(const QString& filePath) {
             exit(0);
           });
 #endif
+
+  emit MozillaVPN::instance()->recordGleanEventWithExtraKeys(
+      GleanSample::updateStep,
+      {{"state", QVariant::fromValue(InstallationProcessExecuted).toString()}});
 
   return true;
 }

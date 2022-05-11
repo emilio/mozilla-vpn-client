@@ -13,7 +13,6 @@
 #include "features/featureinappauth.h"
 #include "features/featureinappaccountcreate.h"
 #include "features/featuresharelogs.h"
-#include <telemetry/gleansample.h>
 #include "iaphandler.h"
 #include "leakdetector.h"
 #include "logger.h"
@@ -40,6 +39,8 @@
 #include "tasks/createsupportticket/taskcreatesupportticket.h"
 #include "tasks/getfeaturelist/taskgetfeaturelist.h"
 #include "taskscheduler.h"
+#include "telemetry/gleansample.h"
+#include "update/updater.h"
 #include "update/versionapi.h"
 #include "urlopener.h"
 
@@ -1766,4 +1767,9 @@ void MozillaVPN::requestDeleteAccount() {
 void MozillaVPN::cancelAccountDeletion() {
   logger.warning() << "Canceling account deletion";
   AuthenticationInApp::instance()->terminateSession();
+}
+
+void MozillaVPN::updateViewShown() {
+  logger.debug() << "Update view shown";
+  Updater::updateViewShown();
 }

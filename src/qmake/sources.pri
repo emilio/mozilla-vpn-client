@@ -138,6 +138,7 @@ SOURCES += \
         timersingleshot.cpp \
         update/updater.cpp \
         update/versionapi.cpp \
+        update/webupdater.cpp \
         urlopener.cpp
 
 HEADERS += \
@@ -294,6 +295,7 @@ HEADERS += \
         timersingleshot.h \
         update/updater.h \
         update/versionapi.h \
+        update/webupdater.h \
         urlopener.h
 
 # Signal handling for unix platforms
