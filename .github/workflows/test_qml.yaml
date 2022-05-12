@@ -117,7 +117,7 @@ jobs:
       - name: Running tests
         shell: bash
         run: |
-          $(pwd)/build/tests/qml/qml_tests -platform offscreen
+          $(pwd)/build/tests/qml/qml_tests
           grcov $(pwd)/build/tests/qml/CMakeFiles/qml_tests.dir \
               -s $(pwd)/build/tests/qml -t lcov --branch --ignore-not-existing \
                   > ${{github.workspace}}/qml_lcov.info
