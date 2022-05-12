@@ -97,11 +97,15 @@ jobs:
           sudo mv qt6 /opt
           cd ..
 
+      - name: Install dependencies
+        run: |
+          pip3 install -r requirements.txt
+
       - name: Install Grcov
         shell: bash
         run: |
           cargo install grcov
-      
+
       - name: Building tests
         shell: bash
         run: |
