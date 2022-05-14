@@ -91,13 +91,13 @@ jobs:
       - name: Packaging
         shell: bash
         env:
-          MACOS_BUNDLE_DIR: ${{github.workspace}}/build/src/Mozilla\ VPN.app/Contents
+          MACOS_BUNDLE_CONTENTS: ${{github.workspace}}/build/src/Mozilla\ VPN.app/Contents
           MACOS_EMBEDDED_PP: ${{ secrets.MACOS_EMBEDDED_PP }}
           MACOS_EMBEDDED_PP_LOGIN: ${{ secrets.MACOS_EMBEDDED_PP_LOGIN }}
         working-directory: ./build/macos/pkg
         run: |
-          echo -n "$MACOS_EMBEDDED_PP_LOGIN" | base64 --decode --output "${MACOS_BUNDLE_DIR}/Contents/Library/LoginItems/MozillaVPNLoginItem.app/Contents/embedded.provisionprofile"
-          echo -n "$MACOS_EMBEDDED_PP" | base64 --decode --output "${MACOS_BUNDLE_DIR}/Contents/embedded.provisionprofile"
+          echo -n "$MACOS_EMBEDDED_PP_LOGIN" | base64 --decode --output "${MACOS_BUNDLE_CONTENTS}/Library/LoginItems/MozillaVPNLoginItem.app/Contents/embedded.provisionprofile"
+          echo -n "$MACOS_EMBEDDED_PP" | base64 --decode --output "${MACOS_BUNDLE_CONTENTS}/embedded.provisionprofile"
           cmake --build $(pwd)/../../build --target pkg
 
           # Add signature
