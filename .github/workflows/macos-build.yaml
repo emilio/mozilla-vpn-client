@@ -91,7 +91,7 @@ jobs:
       - name: Packaging
         shell: bash
         env:
-          MACOS_BUNDLE_CONTENTS: ${{github.workspace}}/build/src/Mozilla\ VPN.app/Contents
+          MACOS_BUNDLE_CONTENTS: ${{github.workspace}}/build/src/Mozilla VPN.app/Contents
           MACOS_EMBEDDED_PP: ${{ secrets.MACOS_EMBEDDED_PP }}
           MACOS_EMBEDDED_PP_LOGIN: ${{ secrets.MACOS_EMBEDDED_PP_LOGIN }}
         working-directory: ./build/macos/pkg
