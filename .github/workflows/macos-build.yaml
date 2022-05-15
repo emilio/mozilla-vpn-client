@@ -98,7 +98,7 @@ jobs:
         run: |
           echo -n "$MACOS_EMBEDDED_PP_LOGIN" | base64 --decode --output "${MACOS_BUNDLE_CONTENTS}/Library/LoginItems/MozillaVPNLoginItem.app/Contents/embedded.provisionprofile"
           echo -n "$MACOS_EMBEDDED_PP" | base64 --decode --output "${MACOS_BUNDLE_CONTENTS}/embedded.provisionprofile"
-          cmake --build $(pwd)/../../build --target pkg
+          cmake --build ${{github.workspace}}/build --target pkg
 
           # Add signature
           productsign --sign "Developer ID Installer: Andrea Marchesini" MozillaVPN-unsigned.pkg MozillaVPN-signed.pkg
