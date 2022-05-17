@@ -28,6 +28,7 @@
 
 #include <QApplication>
 #include <QIcon>
+#include <QStyleFactory>
 #include <QTextStream>
 
 namespace {
@@ -180,6 +181,9 @@ int Command::runQmlApp(std::function<int()>&& a_callback) {
   FeatureList::instance()->initialize();
 
   qInstallMessageHandler(LogHandler::messageQTHandler);
+
+  // Ensure that external styling hints are disabled.
+  qunsetenv("QT_STYLE_OVERRIDE");
 
   logger.info() << "MozillaVPN" << Constants::versionString();
   logger.info() << "User-Agent:" << NetworkManager::userAgent();
