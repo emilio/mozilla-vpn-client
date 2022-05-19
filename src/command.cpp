@@ -28,7 +28,6 @@
 
 #include <QApplication>
 #include <QIcon>
-#include <QStyleFactory>
 #include <QTextStream>
 
 namespace {
