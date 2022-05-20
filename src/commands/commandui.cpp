@@ -574,9 +574,6 @@ int CommandUI::run(QStringList& tokens) {
                      &ServerHandler::close);
 #endif
 
-#ifdef MVPN_ANDROID
-    AndroidGlean::initialize();
-#endif 
 
     // Let's go.
     return qApp->exec();
