@@ -57,7 +57,7 @@ void TaskGetSubscriptionDetails::run() {
           [this](const QByteArray& data) {
             logger.debug() << "Get subscription details completed" << data;
 
-            MozillaVPN::instance()->subscriptionDetailsFetched(data);
+            // TODO: Store subscription data
 
             if (m_authenticationInAppSession) {
               m_authenticationInAppSession->terminate();
